@@ -50,6 +50,17 @@ heroThumbs.forEach((thumb) => {
   });
 });
 
+document.querySelectorAll(".media-thumb video").forEach((video) => {
+  video.addEventListener(
+    "loadedmetadata",
+    () => {
+      const targetTime = Math.min(0.7, Math.max(0, video.duration - 0.1));
+      video.currentTime = Number.isFinite(targetTime) ? targetTime : 0;
+    },
+    { once: true }
+  );
+});
+
 const courtSlides = document.querySelectorAll(".court-slide");
 const courtThumbs = document.querySelectorAll(".court-thumb");
 

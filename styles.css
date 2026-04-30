@@ -89,6 +89,21 @@ a {
   display: none;
 }
 
+.nav-icon-link {
+  display: inline-flex;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+}
+
+.nav-icon-link svg {
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+}
+
 .section-inner {
   width: min(100% - 36px, var(--max));
   margin: 0 auto;
@@ -252,6 +267,21 @@ h3 {
   font-size: 0.94rem;
 }
 
+.hero-contact-line {
+  max-width: 540px;
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.88rem;
+}
+
+.hero-contact-line a {
+  color: var(--green);
+  font-weight: 850;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
 .hero-media {
   position: relative;
 }
@@ -301,7 +331,8 @@ h3 {
   scroll-snap-align: start;
 }
 
-.media-thumb img {
+.media-thumb img,
+.media-thumb video {
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
@@ -322,7 +353,9 @@ h3 {
 }
 
 .media-thumb:hover img,
-.media-thumb.is-active img {
+.media-thumb:hover video,
+.media-thumb.is-active img,
+.media-thumb.is-active video {
   opacity: 1;
   transform: scale(1.04);
 }
@@ -632,6 +665,49 @@ h3 {
   margin: 10px 0 20px;
 }
 
+.final-contact {
+  width: min(100%, 560px);
+  margin: 20px auto 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius);
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.final-contact h3 {
+  margin-bottom: 12px;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.contact-links {
+  display: grid;
+  gap: 10px;
+}
+
+.contact-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.94rem;
+  font-weight: 800;
+}
+
+.contact-links svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  fill: var(--green);
+}
+
+.phone-emoji {
+  color: var(--green);
+  font-size: 1rem;
+  line-height: 1;
+}
+
 .sticky-cta {
   position: fixed;
   z-index: 60;
@@ -706,6 +782,15 @@ h3 {
 
   .desktop-nav a:hover,
   .desktop-nav .nav-cta {
+    color: #061014;
+    background: var(--green);
+  }
+
+  .desktop-nav .nav-icon-link {
+    padding: 0;
+  }
+
+  .desktop-nav .nav-icon-link:hover {
     color: #061014;
     background: var(--green);
   }
