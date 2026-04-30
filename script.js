@@ -49,3 +49,17 @@ heroThumbs.forEach((thumb) => {
     });
   });
 });
+
+const courtSlides = document.querySelectorAll(".court-slide");
+const courtThumbs = document.querySelectorAll(".court-thumb");
+
+courtThumbs.forEach((thumb) => {
+  thumb.addEventListener("click", () => {
+    const targetId = thumb.dataset.target;
+
+    courtThumbs.forEach((item) => item.classList.toggle("is-active", item === thumb));
+    courtSlides.forEach((slide) => {
+      slide.classList.toggle("is-active", slide.dataset.courtId === targetId);
+    });
+  });
+});
