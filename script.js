@@ -1,17 +1,4 @@
 const revealItems = document.querySelectorAll(".reveal");
-const bookingLinks = document.querySelectorAll('a[href*="forms.gle/sqU2mTYSjdZoDCao7"]');
-
-bookingLinks.forEach((link) => {
-  link.addEventListener(
-    "click",
-    () => {
-      if (typeof window.fbq === "function") {
-        window.fbq("track", "Lead");
-      }
-    },
-    { capture: true }
-  );
-});
 
 if ("IntersectionObserver" in window) {
   const observer = new IntersectionObserver(

@@ -39,7 +39,7 @@
         <a href="#offer">Piedāvājums</a>
         <a href="#coach">Trenere</a>
         <a href="#location">Lokācija</a>
-        <a class="nav-cta" href="https://forms.gle/sqU2mTYSjdZoDCao7" target="_blank" rel="noopener">Rezervēt</a>
+        <a class="nav-cta" href="https://forms.gle/sqU2mTYSjdZoDCao7" target="_blank" rel="noopener" onclick="trackReservationClick();">Rezervēt</a>
         <a class="nav-icon-link" href="https://wa.me/37127100171" target="_blank" rel="noopener" aria-label="Rakstīt WhatsApp">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M20.5 11.8a8.4 8.4 0 0 1-12.4 7.4L4 20.5l1.4-4A8.4 8.4 0 1 1 20.5 11.8Zm-8.4-6.6a6.6 6.6 0 0 0-5.5 10.2l.2.3-.8 2.2 2.3-.8.3.2a6.6 6.6 0 1 0 3.5-12.1Zm3.8 9.4c-.2.6-1.1 1.1-1.6 1.2-.4.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.4-3.9-4.5-4.1-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 1-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.2.1.4 0 .6l-.4.6c-.1.1-.3.3-.1.6.2.3.7 1.1 1.5 1.8 1 .9 1.9 1.2 2.2 1.3.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.7-.1.3.1 1.8.9 2.1 1 .3.2.5.2.6.4.1.1.1.7-.1 1.3Z"/>
@@ -57,7 +57,7 @@
             <p class="hero-subhead">Pievienojies draudzīgam un strukturētam padel treniņam Mārupē — iesācējiem un tiem, kuri vēlas uzlabot savu spēli.</p>
             <p class="trust-line">Izmēģinājuma treniņš tikai €15</p>
             <div class="cta-row">
-              <a class="button button-primary" href="https://forms.gle/sqU2mTYSjdZoDCao7" target="_blank" rel="noopener">Rezervēt vietu treniņam</a>
+              <a class="button button-primary" href="https://forms.gle/sqU2mTYSjdZoDCao7" target="_blank" rel="noopener" onclick="trackReservationClick();">Rezervēt vietu treniņam</a>
             </div>
             <p class="bonus-line">Pēc treniņa pieejama arī sauna<span class="bonus-extra">, ģērbtuves un dušas</span>.</p>
             <p class="microcopy">Pēc pieteikuma trenere Gundega ar Tevi sazināsies, lai saskaņotu ērtāko laiku.</p>
@@ -165,10 +165,11 @@
               <li>Grupas formāts</li>
               <li>60 minūšu treniņš</li>
               <li>Lokācija: MyPadel, Grenču iela 5</li>
+              <li>Sauna pēc treniņa</li>
               <li>Raketi iespējams izīrēt, ja nepieciešams (€5)</li>
               <li>Vietu skaits ierobežots</li>
             </ul>
-            <a class="button button-primary full-width" href="https://forms.gle/sqU2mTYSjdZoDCao7" target="_blank" rel="noopener">Rezervēt vietu treniņam</a>
+            <a class="button button-primary full-width" href="https://forms.gle/sqU2mTYSjdZoDCao7" target="_blank" rel="noopener" onclick="trackReservationClick();">Rezervēt vietu treniņam</a>
           </article>
         </div>
       </section>
@@ -348,7 +349,7 @@
           <p class="eyebrow">Šonedēļ vai nākamnedēļ</p>
           <h2>Gatavs izmēģināt padelu?</h2>
           <p>Rezervē savu vietu iesācēju treniņā, un es ar Tevi sazināšos, lai saskaņotu piemērotāko laiku.</p>
-          <a class="button button-primary" href="https://forms.gle/sqU2mTYSjdZoDCao7" target="_blank" rel="noopener">Rezervēt vietu treniņam</a>
+          <a class="button button-primary" href="https://forms.gle/sqU2mTYSjdZoDCao7" target="_blank" rel="noopener" onclick="trackReservationClick();">Rezervēt vietu treniņam</a>
           <p class="trust-line">Tikai €15 • MyPadel, Grenču iela 5 • Pieredze nav nepieciešama</p>
           <div class="final-contact" aria-label="Sazinies ar Gundegu">
             <h3>Sazinies ar Gundegu</h3>
@@ -375,8 +376,18 @@
       </section>
     </main>
 
-    <a class="sticky-cta" href="https://forms.gle/sqU2mTYSjdZoDCao7" target="_blank" rel="noopener">Rezervēt vietu treniņam</a>
+    <a class="sticky-cta" href="https://forms.gle/sqU2mTYSjdZoDCao7" target="_blank" rel="noopener" onclick="trackReservationClick();">Rezervēt vietu treniņam</a>
 
+    <script>
+      function trackReservationClick() {
+        if (typeof fbq === 'function') {
+          fbq('track', 'Lead', {
+            content_name: 'Rezervet button click',
+            content_category: 'Padel trial training'
+          });
+        }
+      }
+    </script>
     <script src="script.js"></script>
   </body>
 </html>
