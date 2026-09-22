@@ -1,30 +1,79 @@
 const META_PIXEL_ID = "1006268881933443";
 const CONSENT_KEY = "pbg_cookie_consent";
 
+const DIRECT_BOOKING_URL =
+  "https://book.padelbygu.com/widget/booking/yVYX05jfBIQx4nXSsoQh";
+
 let checkoutEventSent = false;
+let mobileRedirectScheduled = false;
+
+
+/* =========================================================
+   DEVICE DETECTION
+========================================================= */
+
+function isMobileBookingDevice() {
+  const ua = navigator.userAgent || "";
+
+  const phoneOrAndroid =
+    /Android|iPhone|iPod/i.test(ua);
+
+  /*
+    Modern iPadOS can identify itself as Macintosh.
+  */
+  const iPad =
+    navigator.platform === "MacIntel" &&
+    navigator.maxTouchPoints > 1;
+
+  return phoneOrAndroid || iPad;
+}
+
 
 /* =========================================================
    REVEAL ANIMATIONS
 ========================================================= */
 
-const revealItems = document.querySelectorAll(".reveal");
+const revealItems =
+  document.querySelectorAll(".reveal");
 
 if ("IntersectionObserver" in window) {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.14 }
-  );
 
-  revealItems.forEach((item) => observer.observe(item));
+  const observer =
+    new IntersectionObserver(
+      (entries) => {
+
+        entries.forEach((entry) => {
+
+          if (entry.isIntersecting) {
+
+            entry.target.classList.add(
+              "is-visible"
+            );
+
+            observer.unobserve(
+              entry.target
+            );
+
+          }
+
+        });
+
+      },
+      {
+        threshold: 0.14
+      }
+    );
+
+  revealItems.forEach((item) => {
+    observer.observe(item);
+  });
+
 } else {
-  revealItems.forEach((item) => item.classList.add("is-visible"));
+
+  revealItems.forEach((item) => {
+    item.classList.add("is-visible");
+  });
+
 }
 
 
@@ -32,90 +81,181 @@ if ("IntersectionObserver" in window) {
    FAQ
 ========================================================= */
 
-document.querySelectorAll(".faq-list details").forEach((item) => {
-  item.addEventListener("toggle", () => {
-    if (!item.open) return;
+document
+  .querySelectorAll(".faq-list details")
+  .forEach((item) => {
 
-    document.querySelectorAll(".faq-list details").forEach((otherItem) => {
-      if (otherItem !== item) {
-        otherItem.open = false;
+    item.addEventListener(
+      "toggle",
+      () => {
+
+        if (!item.open) return;
+
+        document
+          .querySelectorAll(
+            ".faq-list details"
+          )
+          .forEach((otherItem) => {
+
+            if (otherItem !== item) {
+              otherItem.open = false;
+            }
+
+          });
+
       }
-    });
+    );
+
   });
-});
 
 
 /* =========================================================
    HERO MEDIA GALLERY
 ========================================================= */
 
-const heroItems = document.querySelectorAll(".hero-media-item");
-const heroThumbs = document.querySelectorAll(".media-thumb");
+const heroItems =
+  document.querySelectorAll(
+    ".hero-media-item"
+  );
+
+const heroThumbs =
+  document.querySelectorAll(
+    ".media-thumb"
+  );
 
 heroThumbs.forEach((thumb) => {
-  thumb.addEventListener("click", () => {
-    const targetId = thumb.dataset.target;
 
-    heroThumbs.forEach((item) => {
-      item.classList.toggle("is-active", item === thumb);
-    });
-
-    heroItems.forEach((item) => {
-      const isActive = item.dataset.mediaId === targetId;
-
-      item.classList.toggle("is-active", isActive);
-
-      if (item.tagName === "VIDEO") {
-        if (isActive) {
-          item.play().catch(() => {});
-        } else {
-          item.pause();
-        }
-      }
-    });
-  });
-});
-
-document.querySelectorAll(".media-thumb video").forEach((video) => {
-  video.addEventListener(
-    "loadedmetadata",
+  thumb.addEventListener(
+    "click",
     () => {
-      const targetTime = Math.min(
-        0.7,
-        Math.max(0, video.duration - 0.1)
-      );
 
-      video.currentTime = Number.isFinite(targetTime)
-        ? targetTime
-        : 0;
-    },
-    { once: true }
+      const targetId =
+        thumb.dataset.target;
+
+      heroThumbs.forEach((item) => {
+
+        item.classList.toggle(
+          "is-active",
+          item === thumb
+        );
+
+      });
+
+      heroItems.forEach((item) => {
+
+        const isActive =
+          item.dataset.mediaId ===
+          targetId;
+
+        item.classList.toggle(
+          "is-active",
+          isActive
+        );
+
+        if (
+          item.tagName === "VIDEO"
+        ) {
+
+          if (isActive) {
+
+            item
+              .play()
+              .catch(() => {});
+
+          } else {
+
+            item.pause();
+
+          }
+
+        }
+
+      });
+
+    }
   );
+
 });
+
+
+document
+  .querySelectorAll(
+    ".media-thumb video"
+  )
+  .forEach((video) => {
+
+    video.addEventListener(
+      "loadedmetadata",
+      () => {
+
+        const targetTime =
+          Math.min(
+            0.7,
+            Math.max(
+              0,
+              video.duration - 0.1
+            )
+          );
+
+        video.currentTime =
+          Number.isFinite(targetTime)
+            ? targetTime
+            : 0;
+
+      },
+      {
+        once: true
+      }
+    );
+
+  });
 
 
 /* =========================================================
    COURT GALLERY
 ========================================================= */
 
-const courtSlides = document.querySelectorAll(".court-slide");
-const courtThumbs = document.querySelectorAll(".court-thumb");
+const courtSlides =
+  document.querySelectorAll(
+    ".court-slide"
+  );
+
+const courtThumbs =
+  document.querySelectorAll(
+    ".court-thumb"
+  );
 
 courtThumbs.forEach((thumb) => {
-  thumb.addEventListener("click", () => {
-    const targetId = thumb.dataset.target;
 
-    courtThumbs.forEach((item) => {
-      item.classList.toggle("is-active", item === thumb);
-    });
+  thumb.addEventListener(
+    "click",
+    () => {
 
-    courtSlides.forEach((slide) => {
-      slide.classList.toggle(
-        "is-active",
-        slide.dataset.courtId === targetId
-      );
-    });
-  });
+      const targetId =
+        thumb.dataset.target;
+
+      courtThumbs.forEach((item) => {
+
+        item.classList.toggle(
+          "is-active",
+          item === thumb
+        );
+
+      });
+
+      courtSlides.forEach((slide) => {
+
+        slide.classList.toggle(
+          "is-active",
+          slide.dataset.courtId ===
+            targetId
+        );
+
+      });
+
+    }
+  );
+
 });
 
 
@@ -124,23 +264,49 @@ courtThumbs.forEach((thumb) => {
 ========================================================= */
 
 function getConsent() {
+
   try {
-    return localStorage.getItem(CONSENT_KEY);
+
+    return localStorage.getItem(
+      CONSENT_KEY
+    );
+
   } catch (error) {
+
     return null;
+
   }
+
 }
+
 
 function setConsent(value) {
+
   try {
-    localStorage.setItem(CONSENT_KEY, value);
+
+    localStorage.setItem(
+      CONSENT_KEY,
+      value
+    );
+
   } catch (error) {
-    // Storage unavailable — simply continue without saving.
+
+    /*
+      Storage unavailable.
+      Continue without saving.
+    */
+
   }
+
 }
 
+
 function hasMarketingConsent() {
-  return getConsent() === "accepted";
+
+  return (
+    getConsent() === "accepted"
+  );
+
 }
 
 
@@ -149,6 +315,7 @@ function hasMarketingConsent() {
 ========================================================= */
 
 function loadMetaPixel() {
+
   if (!hasMarketingConsent()) {
     return;
   }
@@ -157,13 +324,29 @@ function loadMetaPixel() {
     return;
   }
 
-  !(function (f, b, e, v, n, t, s) {
+  !(function (
+    f,
+    b,
+    e,
+    v,
+    n,
+    t,
+    s
+  ) {
+
     if (f.fbq) return;
 
     n = f.fbq = function () {
+
       n.callMethod
-        ? n.callMethod.apply(n, arguments)
-        : n.queue.push(arguments);
+        ? n.callMethod.apply(
+            n,
+            arguments
+          )
+        : n.queue.push(
+            arguments
+          );
+
     };
 
     if (!f._fbq) {
@@ -179,8 +362,16 @@ function loadMetaPixel() {
     t.async = true;
     t.src = v;
 
-    s = b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t, s);
+    s =
+      b.getElementsByTagName(
+        e
+      )[0];
+
+    s.parentNode.insertBefore(
+      t,
+      s
+    );
+
   })(
     window,
     document,
@@ -188,8 +379,16 @@ function loadMetaPixel() {
     "https://connect.facebook.net/en_US/fbevents.js"
   );
 
-  fbq("init", META_PIXEL_ID);
-  fbq("track", "PageView");
+  fbq(
+    "init",
+    META_PIXEL_ID
+  );
+
+  fbq(
+    "track",
+    "PageView"
+  );
+
 }
 
 
@@ -198,31 +397,36 @@ function loadMetaPixel() {
 ========================================================= */
 
 function trackBookingIntent() {
+
   if (!hasMarketingConsent()) {
     return;
   }
 
-  /*
-    Tikai vienreiz konkrētās /booking lapas ielādes laikā.
-    Reload = jauna page load = jauns checkout event.
-  */
   if (checkoutEventSent) {
     return;
   }
 
   loadMetaPixel();
 
-  if (typeof fbq !== "function") {
+  if (
+    typeof fbq !== "function"
+  ) {
     return;
   }
 
-  fbq("track", "InitiateCheckout", {
-    value: 15.0,
-    currency: "EUR",
-    content_name: "PadelByGu izmēģinājuma treniņš"
-  });
+  fbq(
+    "track",
+    "InitiateCheckout",
+    {
+      value: 15.0,
+      currency: "EUR",
+      content_name:
+        "PadelByGu izmēģinājuma treniņš"
+    }
+  );
 
   checkoutEventSent = true;
+
 }
 
 
@@ -231,44 +435,61 @@ function trackBookingIntent() {
 ========================================================= */
 
 function trackPurchase() {
+
   if (!hasMarketingConsent()) {
     return;
   }
 
-  const params = new URLSearchParams(window.location.search);
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
 
   /*
-    Purchase tiek sūtīts tikai tad, ja GHL pēc veiksmīga
-    maksājuma redirectē uz:
-    /booking-success?paid=1
+    Only fire Purchase after
+    successful GHL payment redirect.
   */
-  if (params.get("paid") !== "1") {
+  if (
+    params.get("paid") !== "1"
+  ) {
     return;
   }
 
   loadMetaPixel();
 
-  if (typeof fbq !== "function") {
+  if (
+    typeof fbq !== "function"
+  ) {
     return;
   }
 
-  fbq("track", "Purchase", {
-    value: 15.0,
-    currency: "EUR",
-    content_name: "PadelByGu izmēģinājuma treniņš"
-  });
+  fbq(
+    "track",
+    "Purchase",
+    {
+      value: 15.0,
+      currency: "EUR",
+      content_name:
+        "PadelByGu izmēģinājuma treniņš"
+    }
+  );
 
   /*
-    Pēc eventa nosūtīšanas izņemam ?paid=1 no URL,
-    lai refresh nerada vēl vienu Purchase.
+    Remove ?paid=1 so refresh
+    does not generate another Purchase.
   */
   params.delete("paid");
 
-  const cleanQuery = params.toString();
+  const cleanQuery =
+    params.toString();
 
   const cleanUrl =
     window.location.pathname +
-    (cleanQuery ? "?" + cleanQuery : "") +
+    (
+      cleanQuery
+        ? "?" + cleanQuery
+        : ""
+    ) +
     window.location.hash;
 
   window.history.replaceState(
@@ -276,6 +497,7 @@ function trackPurchase() {
     document.title,
     cleanUrl
   );
+
 }
 
 
@@ -283,10 +505,16 @@ function trackPurchase() {
    UTM / FBCLID PRESERVATION
 ========================================================= */
 
-function preserveTrackingParams(url) {
+function preserveTrackingParams(
+  url
+) {
+
   try {
+
     const currentParams =
-      new URLSearchParams(window.location.search);
+      new URLSearchParams(
+        window.location.search
+      );
 
     const usefulKeys = [
       "utm_source",
@@ -297,31 +525,54 @@ function preserveTrackingParams(url) {
       "fbclid"
     ];
 
-    const target = new URL(url, window.location.origin);
+    const target =
+      new URL(
+        url,
+        window.location.origin
+      );
 
     usefulKeys.forEach((key) => {
-      const value = currentParams.get(key);
+
+      const value =
+        currentParams.get(key);
 
       if (
         value &&
-        !target.searchParams.has(key)
+        !target.searchParams.has(
+          key
+        )
       ) {
-        target.searchParams.set(key, value);
+
+        target.searchParams.set(
+          key,
+          value
+        );
+
       }
+
     });
 
-    if (target.origin === window.location.origin) {
+    if (
+      target.origin ===
+      window.location.origin
+    ) {
+
       return (
         target.pathname +
         target.search +
         target.hash
       );
+
     }
 
     return target.toString();
+
   } catch (error) {
+
     return url;
+
   }
+
 }
 
 
@@ -330,107 +581,166 @@ function preserveTrackingParams(url) {
 ========================================================= */
 
 document
-  .querySelectorAll(".js-booking-link")
+  .querySelectorAll(
+    ".js-booking-link"
+  )
   .forEach((link) => {
+
     const originalHref =
-      link.getAttribute("href") || "/booking";
+      link.getAttribute("href") ||
+      "/booking";
 
     link.href =
-      preserveTrackingParams(originalHref);
+      preserveTrackingParams(
+        originalHref
+      );
 
-    /*
-      Te vairs NEIZŠAUJAM InitiateCheckout.
-      Tas izšaus tikai tad, kad cilvēks reāli
-      būs nonācis /booking lapā.
-    */
   });
 
 
 /* =========================================================
-   GHL BOOKING IFRAME
+   DESKTOP BOOKING EMBED
 ========================================================= */
 
-const bookingFrame =
-  document.querySelector(
-    'iframe[src*="book.padelbygu.com/widget/booking/"]'
-  );
+function loadDesktopBooking() {
 
-if (bookingFrame) {
+  const bookingFrame =
+    document.querySelector(
+      "[data-booking-frame]"
+    );
+
+  if (!bookingFrame) {
+    return;
+  }
 
   const baseSrc =
-    bookingFrame.getAttribute("src");
+    bookingFrame.dataset.src;
 
-  if (baseSrc) {
+  if (!baseSrc) {
+    return;
+  }
 
-    try {
+  const iframeUrl =
+    preserveTrackingParams(
+      baseSrc
+    );
 
-      const currentParams =
-        new URLSearchParams(window.location.search);
+  if (
+    bookingFrame.getAttribute(
+      "src"
+    ) !== iframeUrl
+  ) {
 
-      const target =
-        new URL(baseSrc);
+    bookingFrame.setAttribute(
+      "src",
+      iframeUrl
+    );
 
-      const usefulKeys = [
-        "utm_source",
-        "utm_medium",
-        "utm_campaign",
-        "utm_content",
-        "utm_term",
-        "fbclid"
-      ];
+  }
 
-      let hasTrackingParams = false;
+}
 
-      usefulKeys.forEach((key) => {
 
-        const value =
-          currentParams.get(key);
+/* =========================================================
+   MOBILE DIRECT BOOKING
+========================================================= */
 
-        if (value) {
+function getDirectBookingUrl() {
 
-          target.searchParams.set(
-            key,
-            value
-          );
+  return preserveTrackingParams(
+    DIRECT_BOOKING_URL
+  );
 
-          hasTrackingParams = true;
+}
 
-        }
 
-      });
+function redirectToDirectBooking(
+  delay = 100
+) {
 
-      /*
-        Only change iframe URL when actual
-        tracking parameters exist.
+  if (mobileRedirectScheduled) {
+    return;
+  }
 
-        Normal /booking visits therefore use
-        the exact GHL-generated iframe URL.
-      */
-      if (hasTrackingParams) {
+  mobileRedirectScheduled = true;
 
-        const newSrc =
-          target.toString();
+  document.body.classList.add(
+    "mobile-direct-booking"
+  );
 
-        const currentSrc =
-          bookingFrame.src;
+  window.setTimeout(
+    () => {
 
-        if (currentSrc !== newSrc) {
-
-          bookingFrame.src =
-            newSrc;
-
-        }
-
-      }
-
-    } catch (error) {
-
-      console.warn(
-        "Booking iframe URL error:",
-        error
+      window.location.replace(
+        getDirectBookingUrl()
       );
 
-    }
+    },
+    delay
+  );
+
+}
+
+
+function handleBookingExperience() {
+
+  const page =
+    document.body?.dataset?.page;
+
+  if (page !== "booking") {
+    return;
+  }
+
+  /*
+    Desktop:
+    keep PadelByGu website + embedded GHL calendar.
+  */
+  if (!isMobileBookingDevice()) {
+
+    loadDesktopBooking();
+
+    return;
+
+  }
+
+  /*
+    Mobile:
+    don't even load the iframe.
+    Go directly to GHL so Apple Pay /
+    Google Pay can work as top-level checkout.
+  */
+  document.body.classList.add(
+    "mobile-direct-booking"
+  );
+
+  const consent =
+    getConsent();
+
+  /*
+    New visitor:
+    wait for cookie choice before redirect.
+  */
+  if (!consent) {
+    return;
+  }
+
+  /*
+    If accepted, give Pixel a short moment
+    to send PageView / InitiateCheckout.
+  */
+  if (
+    consent === "accepted"
+  ) {
+
+    redirectToDirectBooking(
+      900
+    );
+
+  } else {
+
+    redirectToDirectBooking(
+      100
+    );
 
   }
 
@@ -442,49 +752,99 @@ if (bookingFrame) {
 ========================================================= */
 
 const cookieBanner =
-  document.querySelector("#cookieBanner");
+  document.querySelector(
+    "#cookieBanner"
+  );
 
 const cookieAccept =
-  document.querySelector("#cookieAccept");
+  document.querySelector(
+    "#cookieAccept"
+  );
 
 const cookieReject =
-  document.querySelector("#cookieReject");
+  document.querySelector(
+    "#cookieReject"
+  );
 
 
 function showCookieBannerIfNeeded() {
+
   if (!cookieBanner) {
     return;
   }
 
   if (!getConsent()) {
+
     cookieBanner.hidden = false;
+
   }
+
 }
 
 
 function acceptCookies() {
-  setConsent("accepted");
+
+  setConsent(
+    "accepted"
+  );
 
   if (cookieBanner) {
+
     cookieBanner.hidden = true;
+
   }
 
   loadMetaPixel();
 
-  /*
-    Ja lietotājs jau atrodas /booking,
-    InitiateCheckout izšaus tūlīt pēc consent.
-  */
   runPageTracking();
+
+  /*
+    On mobile continue automatically
+    to top-level GHL after consent.
+  */
+  if (
+    document.body?.dataset?.page ===
+      "booking" &&
+    isMobileBookingDevice()
+  ) {
+
+    redirectToDirectBooking(
+      900
+    );
+
+  }
+
 }
 
 
 function rejectCookies() {
-  setConsent("rejected");
+
+  setConsent(
+    "rejected"
+  );
 
   if (cookieBanner) {
+
     cookieBanner.hidden = true;
+
   }
+
+  /*
+    Booking/payment still works.
+    We simply don't load Meta Pixel.
+  */
+  if (
+    document.body?.dataset?.page ===
+      "booking" &&
+    isMobileBookingDevice()
+  ) {
+
+    redirectToDirectBooking(
+      100
+    );
+
+  }
+
 }
 
 
@@ -504,22 +864,24 @@ cookieReject?.addEventListener(
 ========================================================= */
 
 function runPageTracking() {
+
   const page =
     document.body?.dataset?.page;
 
-  /*
-    padelbygu.com/booking
-  */
   if (page === "booking") {
+
     trackBookingIntent();
+
   }
 
-  /*
-    padelbygu.com/booking-success?paid=1
-  */
-  if (page === "booking-success") {
+  if (
+    page === "booking-success"
+  ) {
+
     trackPurchase();
+
   }
+
 }
 
 
@@ -527,25 +889,14 @@ function runPageTracking() {
    INITIALIZATION
 ========================================================= */
 
-/*
-  Ja lietotājs iepriekš jau piekritis,
-  Pixel uzreiz ielādējas.
-*/
 if (hasMarketingConsent()) {
+
   loadMetaPixel();
+
 }
 
-/*
-  Ja izvēles vēl nav, parādām banneri.
-*/
 showCookieBannerIfNeeded();
 
-/*
-  /booking -> InitiateCheckout
-  /booking-success?paid=1 -> Purchase
-
-  Ja consent vēl nav dots, nekas nenotiek.
-  Pēc "Pieņemt visas" runPageTracking()
-  tiek izsaukts vēlreiz.
-*/
 runPageTracking();
+
+handleBookingExperience();
