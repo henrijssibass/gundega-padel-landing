@@ -1,8 +1,7 @@
 const META_PIXEL_ID = "1006268881933443";
-
 const CONSENT_KEY = "pbg_cookie_consent";
-const CHECKOUT_KEY = "pbg_checkout_started";
-const PURCHASE_KEY = "pbg_purchase_sent";
+
+let checkoutEventSent = false;
 
 /* =========================================================
    REVEAL ANIMATIONS
@@ -28,6 +27,7 @@ if ("IntersectionObserver" in window) {
   revealItems.forEach((item) => item.classList.add("is-visible"));
 }
 
+
 /* =========================================================
    FAQ
 ========================================================= */
@@ -43,6 +43,7 @@ document.querySelectorAll(".faq-list details").forEach((item) => {
     });
   });
 });
+
 
 /* =========================================================
    HERO MEDIA GALLERY
@@ -92,6 +93,7 @@ document.querySelectorAll(".media-thumb video").forEach((video) => {
   );
 });
 
+
 /* =========================================================
    COURT GALLERY
 ========================================================= */
@@ -116,6 +118,7 @@ courtThumbs.forEach((thumb) => {
   });
 });
 
+
 /* =========================================================
    COOKIE CONSENT
 ========================================================= */
@@ -132,13 +135,14 @@ function setConsent(value) {
   try {
     localStorage.setItem(CONSENT_KEY, value);
   } catch (error) {
-    // Ignore storage errors.
+    // Storage unavailable — simply continue without saving.
   }
 }
 
 function hasMarketingConsent() {
   return getConsent() === "accepted";
 }
+
 
 /* =========================================================
    META PIXEL
@@ -188,42 +192,21 @@ function loadMetaPixel() {
   fbq("track", "PageView");
 }
 
-function trackMetaEvent(eventName, params = {}) {
-  if (!hasMarketingConsent()) {
-    return false;
-  }
-
-  loadMetaPixel();
-
-  if (typeof fbq !== "function") {
-    return false;
-  }
-
-  fbq("track", eventName, params);
-
-  return true;
-}
 
 /* =========================================================
    INITIATE CHECKOUT
 ========================================================= */
 
 function trackBookingIntent() {
-  /*
-    Important:
-    Do NOT mark checkout as tracked before Meta Pixel
-    is actually allowed to send the event.
-
-    This fixes the issue where a user reached /booking
-    before accepting cookies, then accepted cookies,
-    but InitiateCheckout never fired.
-  */
-
   if (!hasMarketingConsent()) {
     return;
   }
 
-  if (sessionStorage.getItem(CHECKOUT_KEY)) {
+  /*
+    Tikai vienreiz konkrētās /booking lapas ielādes laikā.
+    Reload = jauna page load = jauns checkout event.
+  */
+  if (checkoutEventSent) {
     return;
   }
 
@@ -239,33 +222,27 @@ function trackBookingIntent() {
     content_name: "PadelByGu izmēģinājuma treniņš"
   });
 
-  sessionStorage.setItem(CHECKOUT_KEY, "1");
+  checkoutEventSent = true;
 }
+
 
 /* =========================================================
    PURCHASE
 ========================================================= */
 
 function trackPurchase() {
-  /*
-    Purchase is only sent if this browser session
-    actually passed through the booking flow first.
-
-    This prevents someone manually opening
-    /booking-success from generating a Purchase.
-  */
-
   if (!hasMarketingConsent()) {
     return;
   }
 
-  const bookingStarted =
-    sessionStorage.getItem(CHECKOUT_KEY);
+  const params = new URLSearchParams(window.location.search);
 
-  const purchaseAlreadySent =
-    sessionStorage.getItem(PURCHASE_KEY);
-
-  if (!bookingStarted || purchaseAlreadySent) {
+  /*
+    Purchase tiek sūtīts tikai tad, ja GHL pēc veiksmīga
+    maksājuma redirectē uz:
+    /booking-success?paid=1
+  */
+  if (params.get("paid") !== "1") {
     return;
   }
 
@@ -281,11 +258,29 @@ function trackPurchase() {
     content_name: "PadelByGu izmēģinājuma treniņš"
   });
 
-  sessionStorage.setItem(PURCHASE_KEY, "1");
+  /*
+    Pēc eventa nosūtīšanas izņemam ?paid=1 no URL,
+    lai refresh nerada vēl vienu Purchase.
+  */
+  params.delete("paid");
+
+  const cleanQuery = params.toString();
+
+  const cleanUrl =
+    window.location.pathname +
+    (cleanQuery ? "?" + cleanQuery : "") +
+    window.location.hash;
+
+  window.history.replaceState(
+    {},
+    document.title,
+    cleanUrl
+  );
 }
 
+
 /* =========================================================
-   PRESERVE UTM + FBCLID
+   UTM / FBCLID PRESERVATION
 ========================================================= */
 
 function preserveTrackingParams(url) {
@@ -302,8 +297,7 @@ function preserveTrackingParams(url) {
       "fbclid"
     ];
 
-    const target =
-      new URL(url, window.location.origin);
+    const target = new URL(url, window.location.origin);
 
     usefulKeys.forEach((key) => {
       const value = currentParams.get(key);
@@ -315,11 +309,6 @@ function preserveTrackingParams(url) {
         target.searchParams.set(key, value);
       }
     });
-
-    /*
-      Internal URLs remain clean:
-      /booking?utm_source=...
-    */
 
     if (target.origin === window.location.origin) {
       return (
@@ -335,8 +324,9 @@ function preserveTrackingParams(url) {
   }
 }
 
+
 /* =========================================================
-   BOOKING CTA LINKS
+   HOMEPAGE BOOKING LINKS
 ========================================================= */
 
 document
@@ -348,27 +338,20 @@ document
     link.href =
       preserveTrackingParams(originalHref);
 
-    link.addEventListener("click", () => {
-      /*
-        If consent already exists,
-        InitiateCheckout can fire immediately.
-
-        If consent has not been given,
-        /booking will fire it after consent.
-      */
-
-      trackBookingIntent();
-    });
+    /*
+      Te vairs NEIZŠAUJAM InitiateCheckout.
+      Tas izšaus tikai tad, kad cilvēks reāli
+      būs nonācis /booking lapā.
+    */
   });
+
 
 /* =========================================================
    GHL BOOKING IFRAME
 ========================================================= */
 
 const bookingFrame =
-  document.querySelector(
-    "#padelbyguBookingFrame"
-  );
+  document.querySelector("#padelbyguBookingFrame");
 
 if (bookingFrame) {
   const baseSrc =
@@ -378,9 +361,7 @@ if (bookingFrame) {
   if (baseSrc) {
     try {
       const currentParams =
-        new URLSearchParams(
-          window.location.search
-        );
+        new URLSearchParams(window.location.search);
 
       const target = new URL(baseSrc);
 
@@ -394,8 +375,7 @@ if (bookingFrame) {
       ];
 
       usefulKeys.forEach((key) => {
-        const value =
-          currentParams.get(key);
+        const value = currentParams.get(key);
 
         if (value) {
           target.searchParams.set(
@@ -413,6 +393,7 @@ if (bookingFrame) {
   }
 }
 
+
 /* =========================================================
    COOKIE BANNER
 ========================================================= */
@@ -426,6 +407,7 @@ const cookieAccept =
 const cookieReject =
   document.querySelector("#cookieReject");
 
+
 function showCookieBannerIfNeeded() {
   if (!cookieBanner) {
     return;
@@ -436,6 +418,7 @@ function showCookieBannerIfNeeded() {
   }
 }
 
+
 function acceptCookies() {
   setConsent("accepted");
 
@@ -443,19 +426,15 @@ function acceptCookies() {
     cookieBanner.hidden = true;
   }
 
-  /*
-    Pixel now loads AFTER explicit consent.
-  */
-
   loadMetaPixel();
 
   /*
-    Also fire the page-specific conversion event
-    that may have been blocked before consent.
+    Ja lietotājs jau atrodas /booking,
+    InitiateCheckout izšaus tūlīt pēc consent.
   */
-
   runPageTracking();
 }
+
 
 function rejectCookies() {
   setConsent("rejected");
@@ -464,6 +443,7 @@ function rejectCookies() {
     cookieBanner.hidden = true;
   }
 }
+
 
 cookieAccept?.addEventListener(
   "click",
@@ -475,8 +455,9 @@ cookieReject?.addEventListener(
   rejectCookies
 );
 
+
 /* =========================================================
-   PAGE-SPECIFIC TRACKING
+   PAGE-SPECIFIC META EVENTS
 ========================================================= */
 
 function runPageTracking() {
@@ -484,47 +465,44 @@ function runPageTracking() {
     document.body?.dataset?.page;
 
   /*
-    /booking
+    padelbygu.com/booking
   */
-
   if (page === "booking") {
     trackBookingIntent();
   }
 
   /*
-    /booking-success
+    padelbygu.com/booking-success?paid=1
   */
-
   if (page === "booking-success") {
     trackPurchase();
   }
 }
+
 
 /* =========================================================
    INITIALIZATION
 ========================================================= */
 
 /*
-  Returning visitors who already accepted
-  marketing cookies can load Meta immediately.
+  Ja lietotājs iepriekš jau piekritis,
+  Pixel uzreiz ielādējas.
 */
-
 if (hasMarketingConsent()) {
   loadMetaPixel();
 }
 
 /*
-  First-time visitors see consent banner.
+  Ja izvēles vēl nav, parādām banneri.
 */
-
 showCookieBannerIfNeeded();
 
 /*
-  Run page event.
+  /booking -> InitiateCheckout
+  /booking-success?paid=1 -> Purchase
 
-  If consent doesn't exist yet, nothing fires.
-  After the visitor clicks "Pieņemt",
-  acceptCookies() calls this function again.
+  Ja consent vēl nav dots, nekas nenotiek.
+  Pēc "Pieņemt visas" runPageTracking()
+  tiek izsaukts vēlreiz.
 */
-
 runPageTracking();
