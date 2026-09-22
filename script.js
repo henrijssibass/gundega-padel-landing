@@ -351,19 +351,24 @@ document
 ========================================================= */
 
 const bookingFrame =
-  document.querySelector("#padelbyguBookingFrame");
+  document.querySelector(
+    'iframe[src*="book.padelbygu.com/widget/booking/"]'
+  );
 
 if (bookingFrame) {
+
   const baseSrc =
-    bookingFrame.dataset.src ||
     bookingFrame.getAttribute("src");
 
   if (baseSrc) {
+
     try {
+
       const currentParams =
         new URLSearchParams(window.location.search);
 
-      const target = new URL(baseSrc);
+      const target =
+        new URL(baseSrc);
 
       const usefulKeys = [
         "utm_source",
@@ -377,33 +382,58 @@ if (bookingFrame) {
       let hasTrackingParams = false;
 
       usefulKeys.forEach((key) => {
-        const value = currentParams.get(key);
+
+        const value =
+          currentParams.get(key);
 
         if (value) {
-          target.searchParams.set(key, value);
+
+          target.searchParams.set(
+            key,
+            value
+          );
+
           hasTrackingParams = true;
+
         }
+
       });
 
-      const newSrc = target.toString();
-      const currentSrc = bookingFrame.src;
-
       /*
-        IMPORTANT:
-        Do not reload the GHL iframe if it is already
-        pointing to the correct URL.
+        Only change iframe URL when actual
+        tracking parameters exist.
+
+        Normal /booking visits therefore use
+        the exact GHL-generated iframe URL.
       */
-      if (
-        hasTrackingParams &&
-        currentSrc !== newSrc
-      ) {
-        bookingFrame.src = newSrc;
+      if (hasTrackingParams) {
+
+        const newSrc =
+          target.toString();
+
+        const currentSrc =
+          bookingFrame.src;
+
+        if (currentSrc !== newSrc) {
+
+          bookingFrame.src =
+            newSrc;
+
+        }
+
       }
 
     } catch (error) {
-      console.warn("Booking iframe URL error:", error);
+
+      console.warn(
+        "Booking iframe URL error:",
+        error
+      );
+
     }
+
   }
+
 }
 
 
