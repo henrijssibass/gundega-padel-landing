@@ -10,10 +10,25 @@
     name="description"
     content="Izvēlies PadelByGu izmēģinājuma treniņa laiku un rezervē savu vietu par €15."
   >
-<link rel="preconnect" href="https://book.padelbygu.com" crossorigin>
-<link rel="dns-prefetch" href="//book.padelbygu.com">
-<link rel="preconnect" href="https://link.msgsndr.com" crossorigin>
-<link rel="preconnect" href="https://js.stripe.com" crossorigin>
+
+  <!-- Faster connection to GHL / Stripe -->
+  <link
+    rel="preconnect"
+    href="https://book.padelbygu.com"
+    crossorigin
+  >
+
+  <link
+    rel="dns-prefetch"
+    href="//book.padelbygu.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://js.stripe.com"
+    crossorigin
+  >
+
   <link
     rel="canonical"
     href="https://padelbygu.com/booking"
@@ -81,24 +96,21 @@
 
       <div class="section-inner booking-layout">
 
-        <!-- GHL calendar -->
+        <!-- Official GHL calendar embed -->
         <div class="booking-widget-card">
 
- <iframe
-  id="padelbyguBookingFrame"
-  data-src="https://book.padelbygu.com/widget/bookings/padelbygu-trial"
-  src="https://book.padelbygu.com/widget/bookings/padelbygu-trial"
-  allow="payment *"
-  allowpaymentrequest
-  style="
-    width:100%;
-    border:none;
-    overflow:hidden;
-  "
-  scrolling="no"
-  loading="eager"
-  title="PadelByGu izmēģinājuma treniņa rezervācija"
-></iframe>
+          <iframe
+            src="https://book.padelbygu.com/widget/booking/yVYX05jfBIQx4nXSsoQh"
+            allow="payment"
+            style="
+              width: 100%;
+              border: none;
+              overflow: hidden;
+            "
+            scrolling="no"
+            id="yVYX05jfBIQx4nXSsoQh_1790076102223"
+            title="PadelByGu izmēģinājuma treniņa rezervācija"
+          ></iframe>
 
         </div>
 
@@ -219,13 +231,18 @@
   </div>
 
 
-  <!-- GHL iframe resize -->
+  <!--
+    IMPORTANT:
+    script.js is loaded first so UTM / fbclid can be
+    added before GHL's embed helper initializes.
+  -->
+  <script src="script.js"></script>
+
+  <!-- Official GHL embed helper -->
   <script
-    src="https://link.msgsndr.com/js/form_embed.js"
+    src="https://book.padelbygu.com/js/form_embed.js"
     type="text/javascript"
   ></script>
-
-  <script src="script.js"></script>
 
 </body>
 </html>
