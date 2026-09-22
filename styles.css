@@ -885,3 +885,359 @@ h3 {
     grid-template-columns: 0.9fr 1.1fr;
   }
 }
+
+/* =========================================================
+   PadelByGu launch additions: footer, cookie banner,
+   booking, success and legal pages
+========================================================= */
+
+.site-footer {
+  padding: 34px 0 110px;
+  color: rgba(255, 255, 255, 0.74);
+  background: #071114;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-grid {
+  display: grid;
+  gap: 22px;
+}
+
+.site-footer strong {
+  color: #fff;
+  font-size: 1rem;
+}
+
+.site-footer p {
+  margin: 6px 0 0;
+  font-size: 0.88rem;
+}
+
+.site-footer a {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.site-footer a:hover {
+  color: var(--green);
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  align-items: flex-start;
+}
+
+.footer-links a {
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+/* Cookie consent */
+.cookie-banner[hidden] {
+  display: none !important;
+}
+
+.cookie-banner {
+  position: fixed;
+  z-index: 100;
+  left: 14px;
+  right: 14px;
+  bottom: 86px;
+  max-width: 920px;
+  margin: 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 22px 70px rgba(7, 16, 20, 0.24);
+}
+
+.cookie-banner__content {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+}
+
+.cookie-banner strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 1rem;
+}
+
+.cookie-banner p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.cookie-banner a {
+  display: inline-block;
+  margin-top: 6px;
+  color: var(--blue);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.cookie-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cookie-button {
+  min-height: 44px;
+  border-radius: 999px;
+  padding: 11px 16px;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.cookie-button--primary {
+  border: 1px solid var(--ink);
+  color: #061014;
+  background: var(--green);
+}
+
+.cookie-button--secondary {
+  border: 1px solid var(--line);
+  color: var(--ink);
+  background: #fff;
+}
+
+/* Shared inner-page header */
+.inner-page-header {
+  position: static;
+  color: #fff;
+  background: linear-gradient(135deg, var(--dark), var(--dark-2));
+}
+
+.inner-page-header .brand {
+  pointer-events: auto;
+}
+
+/* Booking page */
+.booking-page,
+.success-page,
+.legal-page {
+  min-height: 100vh;
+  background: var(--soft);
+}
+
+.booking-hero,
+.success-hero,
+.legal-hero {
+  padding: 72px 0 30px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(18, 111, 255, 0.2), transparent 28%),
+    linear-gradient(135deg, var(--dark), var(--dark-2));
+}
+
+.booking-hero h1,
+.success-hero h1,
+.legal-hero h1 {
+  margin-bottom: 12px;
+  font-size: clamp(2.2rem, 8vw, 4.3rem);
+}
+
+.booking-hero p,
+.success-hero p,
+.legal-hero p {
+  max-width: 720px;
+  margin-bottom: 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 1rem;
+}
+
+.booking-section {
+  padding: 36px 0 72px;
+}
+
+.booking-layout {
+  display: grid;
+  gap: 18px;
+}
+
+.booking-widget-card,
+.booking-trust-card,
+.success-card,
+.legal-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 10px 34px rgba(7, 16, 20, 0.06);
+}
+
+.booking-widget-card {
+  overflow: hidden;
+  padding: 8px;
+}
+
+.booking-widget-card iframe {
+  width: 100%;
+  min-height: 1040px;
+  border: 0;
+}
+
+.booking-trust-card {
+  padding: 22px;
+}
+
+.booking-trust-card h2 {
+  margin-bottom: 16px;
+  font-size: 1.35rem;
+}
+
+.booking-trust-list {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.booking-trust-list li {
+  position: relative;
+  padding-left: 24px;
+  color: var(--muted);
+}
+
+.booking-trust-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--green-deep);
+  font-weight: 900;
+}
+
+.booking-small-print {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+/* Success */
+.success-section {
+  padding: 52px 0 80px;
+}
+
+.success-card {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 34px;
+  text-align: center;
+}
+
+.success-icon {
+  display: grid;
+  width: 62px;
+  height: 62px;
+  place-items: center;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  color: #0f7a3c;
+  background: #ecfdf5;
+  font-size: 1.8rem;
+  font-weight: 900;
+}
+
+.success-card h1 {
+  margin-bottom: 12px;
+  font-size: clamp(2rem, 7vw, 3.2rem);
+}
+
+.success-card > p {
+  color: var(--muted);
+}
+
+.success-details {
+  display: grid;
+  gap: 8px;
+  margin: 24px 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px;
+  background: var(--soft);
+  text-align: left;
+}
+
+.success-details strong {
+  color: var(--ink);
+}
+
+/* Legal pages */
+.legal-section {
+  padding: 36px 0 80px;
+}
+
+.legal-card {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 28px;
+}
+
+.legal-card h2 {
+  margin-top: 34px;
+  margin-bottom: 10px;
+  font-size: 1.45rem;
+}
+
+.legal-card h2:first-child {
+  margin-top: 0;
+}
+
+.legal-card p,
+.legal-card li {
+  color: var(--muted);
+}
+
+.legal-card a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.legal-card ul {
+  padding-left: 22px;
+}
+
+@media (min-width: 720px) {
+  .site-footer {
+    padding-bottom: 34px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr auto;
+    align-items: start;
+  }
+
+  .cookie-banner {
+    bottom: 20px;
+  }
+
+  .cookie-banner__content {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 20px 22px;
+  }
+
+  .cookie-banner__actions {
+    justify-content: flex-end;
+  }
+
+  .booking-layout {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    align-items: start;
+  }
+
+  .booking-trust-card {
+    position: sticky;
+    top: 24px;
+  }
+
+  .legal-card {
+    padding: 42px;
+  }
+}
