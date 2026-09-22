@@ -2,16 +2,21 @@
 <html lang="lv">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Rezervē izmēģinājuma treniņu | PadelByGu</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>
+    Rezervē izmēģinājuma treniņu | PadelByGu
+  </title>
 
   <meta
     name="description"
     content="Izvēlies PadelByGu izmēģinājuma treniņa laiku un rezervē savu vietu par €15."
   >
 
-  <!-- Faster connection to GHL / Stripe -->
   <link
     rel="preconnect"
     href="https://book.padelbygu.com"
@@ -44,6 +49,58 @@
     rel="stylesheet"
     href="styles.css"
   >
+
+  <style>
+    /*
+      Mobile users are redirected to the top-level
+      GHL booking page so wallets work correctly.
+    */
+
+    .mobile-booking-loader {
+      display: none;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 26px 22px;
+      background: #fff;
+      box-shadow: 0 10px 34px rgba(7, 16, 20, 0.06);
+      text-align: center;
+    }
+
+    .mobile-booking-loader__spinner {
+      width: 34px;
+      height: 34px;
+      margin: 0 auto 16px;
+      border: 3px solid #dce5e3;
+      border-top-color: #126fff;
+      border-radius: 50%;
+      animation: pbg-spin 0.8s linear infinite;
+    }
+
+    .mobile-booking-loader h2 {
+      margin: 0 0 8px;
+      font-size: 1.35rem;
+    }
+
+    .mobile-booking-loader p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    body.mobile-direct-booking .booking-widget-card {
+      display: none;
+    }
+
+    body.mobile-direct-booking .mobile-booking-loader {
+      display: block;
+    }
+
+    @keyframes pbg-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
 
 <body
@@ -96,11 +153,36 @@
 
       <div class="section-inner booking-layout">
 
-        <!-- Official GHL calendar embed -->
+        <!-- Mobile redirect status -->
+        <div
+          class="mobile-booking-loader"
+          id="mobileBookingLoader"
+          aria-live="polite"
+        >
+
+          <div
+            class="mobile-booking-loader__spinner"
+            aria-hidden="true"
+          ></div>
+
+          <h2>
+            Atveram rezervāciju…
+          </h2>
+
+          <p>
+            Tūlīt varēsi izvēlēties treniņa laiku un veikt apmaksu.
+          </p>
+
+        </div>
+
+
+        <!-- Desktop GHL calendar -->
         <div class="booking-widget-card">
 
           <iframe
-            src="https://book.padelbygu.com/widget/booking/yVYX05jfBIQx4nXSsoQh"
+            id="yVYX05jfBIQx4nXSsoQh_1790076102223"
+            data-booking-frame
+            data-src="https://book.padelbygu.com/widget/booking/yVYX05jfBIQx4nXSsoQh"
             allow="payment"
             style="
               width: 100%;
@@ -108,14 +190,13 @@
               overflow: hidden;
             "
             scrolling="no"
-            id="yVYX05jfBIQx4nXSsoQh_1790076102223"
             title="PadelByGu izmēģinājuma treniņa rezervācija"
           ></iframe>
 
         </div>
 
 
-        <!-- Sidebar -->
+        <!-- Information -->
         <aside class="booking-trust-card">
 
           <h2>
@@ -150,7 +231,6 @@
 
           </ul>
 
-
           <p class="booking-small-print">
 
             Veicot rezervāciju, Tu piekrīti
@@ -176,7 +256,7 @@
   </main>
 
 
-  <!-- Cookie banner -->
+  <!-- Cookie consent -->
   <div
     class="cookie-banner"
     id="cookieBanner"
@@ -231,14 +311,10 @@
   </div>
 
 
-  <!--
-    IMPORTANT:
-    script.js is loaded first so UTM / fbclid can be
-    added before GHL's embed helper initializes.
-  -->
+  <!-- Website logic -->
   <script src="script.js"></script>
 
-  <!-- Official GHL embed helper -->
+  <!-- Official GHL desktop embed helper -->
   <script
     src="https://book.padelbygu.com/js/form_embed.js"
     type="text/javascript"
