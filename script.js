@@ -374,21 +374,34 @@ if (bookingFrame) {
         "fbclid"
       ];
 
+      let hasTrackingParams = false;
+
       usefulKeys.forEach((key) => {
         const value = currentParams.get(key);
 
         if (value) {
-          target.searchParams.set(
-            key,
-            value
-          );
+          target.searchParams.set(key, value);
+          hasTrackingParams = true;
         }
       });
 
-      bookingFrame.src =
-        target.toString();
+      const newSrc = target.toString();
+      const currentSrc = bookingFrame.src;
+
+      /*
+        IMPORTANT:
+        Do not reload the GHL iframe if it is already
+        pointing to the correct URL.
+      */
+      if (
+        hasTrackingParams &&
+        currentSrc !== newSrc
+      ) {
+        bookingFrame.src = newSrc;
+      }
+
     } catch (error) {
-      bookingFrame.src = baseSrc;
+      console.warn("Booking iframe URL error:", error);
     }
   }
 }
