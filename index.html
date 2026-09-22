@@ -176,115 +176,175 @@
 
 
           <!-- HERO MEDIA -->
-          <div
-            class="hero-media reveal"
-            aria-label="Padela treniņa foto un video"
-          >
+<div
+  class="hero-media reveal"
+  aria-label="Padela treniņa foto un video"
+>
 
-            <div class="hero-frame">
+  <div
+    class="hero-frame"
+    id="heroCarousel"
+    tabindex="0"
+    aria-label="PadelByGu treniņu galerija"
+  >
 
-              <img
-                class="hero-media-item hero-photo is-active"
-                data-media-id="photo-1"
-                src="assets/training-detail.jpeg"
-                alt="Gundega māca padela tehniku pieaugušai spēlētājai"
-                loading="eager"
-              >
-
-              <video
-                class="hero-media-item hero-video"
-                data-media-id="video-1"
-                src="assets/Gu_vid_13.mp4"
-                muted
-                loop
-                playsinline
-                preload="metadata"
-              ></video>
-
-              <img
-                class="hero-media-item hero-photo"
-                data-media-id="photo-2"
-                src="assets/IMG_9888.jpeg"
-                alt="Padela treniņš ar Gundegu MyPadel kortā"
-                loading="lazy"
-              >
-
-              <img
-                class="hero-media-item hero-photo"
-                data-media-id="photo-3"
-                src="assets/hero-coach.jpeg"
-                alt="Trenere Gundega Pastore padela kortā"
-                loading="lazy"
-              >
-
-            </div>
+    <!-- 1. Adult training video -->
+    <video
+      class="hero-media-item hero-video is-active"
+      data-media-id="media-1"
+      src="assets/padel-session.mp4"
+      poster="assets/hero-coach.jpeg"
+      muted
+      loop
+      playsinline
+      autoplay
+      preload="metadata"
+      aria-label="Gundega vada padela treniņu pieaugušai spēlētājai"
+    ></video>
 
 
-            <div
-              class="media-strip"
-              role="tablist"
-              aria-label="Padela treniņa vizuālie materiāli"
-            >
+    <!-- 2. Adult training photo -->
+    <img
+      class="hero-media-item hero-photo"
+      data-media-id="media-2"
+      src="assets/hero-coach.jpeg"
+      alt="Gundega trenē pieaugušu spēlētāju MyPadel kortā"
+      loading="lazy"
+    >
 
-              <button
-                class="media-thumb is-active"
-                type="button"
-                data-target="photo-1"
-                aria-label="Rādīt pirmo foto"
-              >
-                <img
-                  src="assets/training-detail.jpeg"
-                  alt=""
-                >
-                <span>Foto</span>
-              </button>
 
-              <button
-                class="media-thumb"
-                type="button"
-                data-target="video-1"
-                aria-label="Rādīt video"
-              >
-                <video
-                  src="assets/Gu_vid_13.mp4"
-                  muted
-                  playsinline
-                  preload="metadata"
-                  aria-hidden="true"
-                ></video>
+    <!-- 3. Family / child training photo -->
+    <img
+      class="hero-media-item hero-photo"
+      data-media-id="media-3"
+      src="assets/training-detail.jpeg"
+      alt="Gundega vada padela treniņu MyPadel kortā"
+      loading="lazy"
+    >
 
-                <span>Video</span>
-              </button>
 
-              <button
-                class="media-thumb"
-                type="button"
-                data-target="photo-2"
-                aria-label="Rādīt otro foto"
-              >
-                <img
-                  src="assets/IMG_9888.jpeg"
-                  alt=""
-                >
-                <span>Foto</span>
-              </button>
+    <!-- 4. Child training action photo -->
+    <img
+      class="hero-media-item hero-photo"
+      data-media-id="media-4"
+      src="assets/IMG_9888.jpeg"
+      alt="Padela treniņš MyPadel kortā"
+      loading="lazy"
+    >
 
-              <button
-                class="media-thumb"
-                type="button"
-                data-target="photo-3"
-                aria-label="Rādīt trešo foto"
-              >
-                <img
-                  src="assets/hero-coach.jpeg"
-                  alt=""
-                >
-                <span>Foto</span>
-              </button>
 
-            </div>
+    <!-- 5. Child training video -->
+    <video
+      class="hero-media-item hero-video"
+      data-media-id="media-5"
+      src="assets/Gu_vid_13.mp4"
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      aria-label="PadelByGu treniņš MyPadel kortā"
+    ></video>
 
-          </div>
+
+    <!-- Previous -->
+    <button
+      class="hero-arrow hero-arrow--prev"
+      id="heroPrev"
+      type="button"
+      aria-label="Iepriekšējais foto vai video"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          d="M15 18l-6-6 6-6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+
+
+    <!-- Next -->
+    <button
+      class="hero-arrow hero-arrow--next"
+      id="heroNext"
+      type="button"
+      aria-label="Nākamais foto vai video"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          d="M9 6l6 6-6 6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+
+  </div>
+
+
+  <!-- Carousel dots -->
+  <div
+    class="hero-dots"
+    id="heroDots"
+    role="tablist"
+    aria-label="Galerijas navigācija"
+  >
+
+    <button
+      class="hero-dot is-active"
+      type="button"
+      data-index="0"
+      aria-label="Rādīt 1. materiālu"
+      aria-selected="true"
+    ></button>
+
+    <button
+      class="hero-dot"
+      type="button"
+      data-index="1"
+      aria-label="Rādīt 2. materiālu"
+      aria-selected="false"
+    ></button>
+
+    <button
+      class="hero-dot"
+      type="button"
+      data-index="2"
+      aria-label="Rādīt 3. materiālu"
+      aria-selected="false"
+    ></button>
+
+    <button
+      class="hero-dot"
+      type="button"
+      data-index="3"
+      aria-label="Rādīt 4. materiālu"
+      aria-selected="false"
+    ></button>
+
+    <button
+      class="hero-dot"
+      type="button"
+      data-index="4"
+      aria-label="Rādīt 5. materiālu"
+      aria-selected="false"
+    ></button>
+
+  </div>
+
+</div>
 
         </div>
 
