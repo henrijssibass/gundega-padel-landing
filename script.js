@@ -37,27 +37,22 @@ const revealItems =
   document.querySelectorAll(".reveal");
 
 if ("IntersectionObserver" in window) {
-
   const observer =
     new IntersectionObserver(
       (entries) => {
-
         entries.forEach((entry) => {
-
-          if (entry.isIntersecting) {
-
-            entry.target.classList.add(
-              "is-visible"
-            );
-
-            observer.unobserve(
-              entry.target
-            );
-
+          if (!entry.isIntersecting) {
+            return;
           }
 
-        });
+          entry.target.classList.add(
+            "is-visible"
+          );
 
+          observer.unobserve(
+            entry.target
+          );
+        });
       },
       {
         threshold: 0.14
@@ -69,11 +64,11 @@ if ("IntersectionObserver" in window) {
   });
 
 } else {
-
   revealItems.forEach((item) => {
-    item.classList.add("is-visible");
+    item.classList.add(
+      "is-visible"
+    );
   });
-
 }
 
 
@@ -89,7 +84,9 @@ document
       "toggle",
       () => {
 
-        if (!item.open) return;
+        if (!item.open) {
+          return;
+        }
 
         document
           .querySelectorAll(
@@ -110,67 +107,177 @@ document
 
 
 /* =========================================================
-   HERO MEDIA GALLERY
+   HERO MEDIA CAROUSEL
 ========================================================= */
 
 const heroItems =
-  document.querySelectorAll(
-    ".hero-media-item"
+  Array.from(
+    document.querySelectorAll(
+      ".hero-media-item"
+    )
   );
 
-const heroThumbs =
-  document.querySelectorAll(
-    ".media-thumb"
+const heroDots =
+  Array.from(
+    document.querySelectorAll(
+      ".hero-dot"
+    )
   );
 
-heroThumbs.forEach((thumb) => {
+const heroFrame =
+  document.querySelector(
+    "#heroCarousel"
+  );
 
-  thumb.addEventListener(
+const heroPrev =
+  document.querySelector(
+    "#heroPrev"
+  );
+
+const heroNext =
+  document.querySelector(
+    "#heroNext"
+  );
+
+let currentHeroIndex = 0;
+
+
+/* =========================================================
+   SHOW HERO MEDIA
+========================================================= */
+
+function showHeroMedia(index) {
+  if (!heroItems.length) {
+    return;
+  }
+
+  /*
+    Infinite carousel:
+    -1 -> last item
+    last + 1 -> first item
+  */
+  currentHeroIndex =
+    (
+      index +
+      heroItems.length
+    ) %
+    heroItems.length;
+
+
+  heroItems.forEach(
+    (item, itemIndex) => {
+
+      const isActive =
+        itemIndex ===
+        currentHeroIndex;
+
+      item.classList.toggle(
+        "is-active",
+        isActive
+      );
+
+      item.setAttribute(
+        "aria-hidden",
+        isActive
+          ? "false"
+          : "true"
+      );
+
+      /*
+        Only active video plays.
+      */
+      if (
+        item.tagName === "VIDEO"
+      ) {
+
+        if (isActive) {
+          item
+            .play()
+            .catch(() => {});
+        } else {
+          item.pause();
+        }
+
+      }
+
+    }
+  );
+
+
+  heroDots.forEach(
+    (dot, dotIndex) => {
+
+      const isActive =
+        dotIndex ===
+        currentHeroIndex;
+
+      dot.classList.toggle(
+        "is-active",
+        isActive
+      );
+
+      dot.setAttribute(
+        "aria-selected",
+        isActive
+          ? "true"
+          : "false"
+      );
+
+    }
+  );
+}
+
+
+/* =========================================================
+   PREVIOUS / NEXT
+========================================================= */
+
+function showPreviousHeroMedia() {
+  showHeroMedia(
+    currentHeroIndex - 1
+  );
+}
+
+
+function showNextHeroMedia() {
+  showHeroMedia(
+    currentHeroIndex + 1
+  );
+}
+
+
+heroPrev?.addEventListener(
+  "click",
+  showPreviousHeroMedia
+);
+
+
+heroNext?.addEventListener(
+  "click",
+  showNextHeroMedia
+);
+
+
+/* =========================================================
+   DOT NAVIGATION
+========================================================= */
+
+heroDots.forEach((dot) => {
+
+  dot.addEventListener(
     "click",
     () => {
 
-      const targetId =
-        thumb.dataset.target;
-
-      heroThumbs.forEach((item) => {
-
-        item.classList.toggle(
-          "is-active",
-          item === thumb
+      const index =
+        Number(
+          dot.dataset.index
         );
 
-      });
-
-      heroItems.forEach((item) => {
-
-        const isActive =
-          item.dataset.mediaId ===
-          targetId;
-
-        item.classList.toggle(
-          "is-active",
-          isActive
-        );
-
-        if (
-          item.tagName === "VIDEO"
-        ) {
-
-          if (isActive) {
-
-            item
-              .play()
-              .catch(() => {});
-
-          } else {
-
-            item.pause();
-
-          }
-
-        }
-
-      });
+      if (
+        Number.isFinite(index)
+      ) {
+        showHeroMedia(index);
+      }
 
     }
   );
@@ -178,37 +285,117 @@ heroThumbs.forEach((thumb) => {
 });
 
 
-document
-  .querySelectorAll(
-    ".media-thumb video"
-  )
-  .forEach((video) => {
+/* =========================================================
+   KEYBOARD NAVIGATION
+========================================================= */
 
-    video.addEventListener(
-      "loadedmetadata",
-      () => {
+heroFrame?.addEventListener(
+  "keydown",
+  (event) => {
 
-        const targetTime =
-          Math.min(
-            0.7,
-            Math.max(
-              0,
-              video.duration - 0.1
-            )
-          );
+    if (
+      event.key === "ArrowLeft"
+    ) {
 
-        video.currentTime =
-          Number.isFinite(targetTime)
-            ? targetTime
-            : 0;
+      event.preventDefault();
+      showPreviousHeroMedia();
 
-      },
-      {
-        once: true
-      }
-    );
+    }
 
-  });
+    if (
+      event.key === "ArrowRight"
+    ) {
+
+      event.preventDefault();
+      showNextHeroMedia();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   MOBILE SWIPE
+========================================================= */
+
+let heroTouchStartX = 0;
+let heroTouchStartY = 0;
+
+
+heroFrame?.addEventListener(
+  "touchstart",
+  (event) => {
+
+    const touch =
+      event.changedTouches[0];
+
+    heroTouchStartX =
+      touch.clientX;
+
+    heroTouchStartY =
+      touch.clientY;
+
+  },
+  {
+    passive: true
+  }
+);
+
+
+heroFrame?.addEventListener(
+  "touchend",
+  (event) => {
+
+    const touch =
+      event.changedTouches[0];
+
+    const deltaX =
+      touch.clientX -
+      heroTouchStartX;
+
+    const deltaY =
+      touch.clientY -
+      heroTouchStartY;
+
+    /*
+      Normal vertical scrolling
+      should not change slides.
+    */
+    if (
+      Math.abs(deltaX) <
+      Math.abs(deltaY)
+    ) {
+      return;
+    }
+
+    /*
+      Ignore tiny finger movements.
+    */
+    if (
+      Math.abs(deltaX) < 45
+    ) {
+      return;
+    }
+
+    if (deltaX < 0) {
+      showNextHeroMedia();
+    } else {
+      showPreviousHeroMedia();
+    }
+
+  },
+  {
+    passive: true
+  }
+);
+
+
+/* =========================================================
+   HERO INITIAL STATE
+========================================================= */
+
+showHeroMedia(0);
 
 
 /* =========================================================
@@ -224,6 +411,7 @@ const courtThumbs =
   document.querySelectorAll(
     ".court-thumb"
   );
+
 
 courtThumbs.forEach((thumb) => {
 
@@ -242,6 +430,7 @@ courtThumbs.forEach((thumb) => {
         );
 
       });
+
 
       courtSlides.forEach((slide) => {
 
@@ -264,49 +453,35 @@ courtThumbs.forEach((thumb) => {
 ========================================================= */
 
 function getConsent() {
-
   try {
-
     return localStorage.getItem(
       CONSENT_KEY
     );
-
   } catch (error) {
-
     return null;
-
   }
-
 }
 
 
 function setConsent(value) {
-
   try {
-
     localStorage.setItem(
       CONSENT_KEY,
       value
     );
-
   } catch (error) {
-
     /*
       Storage unavailable.
       Continue without saving.
     */
-
   }
-
 }
 
 
 function hasMarketingConsent() {
-
   return (
     getConsent() === "accepted"
   );
-
 }
 
 
@@ -315,7 +490,6 @@ function hasMarketingConsent() {
 ========================================================= */
 
 function loadMetaPixel() {
-
   if (!hasMarketingConsent()) {
     return;
   }
@@ -337,7 +511,6 @@ function loadMetaPixel() {
     if (f.fbq) return;
 
     n = f.fbq = function () {
-
       n.callMethod
         ? n.callMethod.apply(
             n,
@@ -346,7 +519,6 @@ function loadMetaPixel() {
         : n.queue.push(
             arguments
           );
-
     };
 
     if (!f._fbq) {
@@ -379,6 +551,7 @@ function loadMetaPixel() {
     "https://connect.facebook.net/en_US/fbevents.js"
   );
 
+
   fbq(
     "init",
     META_PIXEL_ID
@@ -388,7 +561,6 @@ function loadMetaPixel() {
     "track",
     "PageView"
   );
-
 }
 
 
@@ -397,7 +569,6 @@ function loadMetaPixel() {
 ========================================================= */
 
 function trackBookingIntent() {
-
   if (!hasMarketingConsent()) {
     return;
   }
@@ -414,6 +585,7 @@ function trackBookingIntent() {
     return;
   }
 
+
   fbq(
     "track",
     "InitiateCheckout",
@@ -426,7 +598,6 @@ function trackBookingIntent() {
   );
 
   checkoutEventSent = true;
-
 }
 
 
@@ -435,25 +606,28 @@ function trackBookingIntent() {
 ========================================================= */
 
 function trackPurchase() {
-
   if (!hasMarketingConsent()) {
     return;
   }
+
 
   const params =
     new URLSearchParams(
       window.location.search
     );
 
+
   /*
-    Only fire Purchase after
-    successful GHL payment redirect.
+    Purchase only after successful
+    GHL payment redirect:
+    /booking-success?paid=1
   */
   if (
     params.get("paid") !== "1"
   ) {
     return;
   }
+
 
   loadMetaPixel();
 
@@ -462,6 +636,7 @@ function trackPurchase() {
   ) {
     return;
   }
+
 
   fbq(
     "track",
@@ -474,9 +649,11 @@ function trackPurchase() {
     }
   );
 
+
   /*
-    Remove ?paid=1 so refresh
-    does not generate another Purchase.
+    Remove paid=1 after sending event
+    so a refresh does not create
+    another Purchase.
   */
   params.delete("paid");
 
@@ -492,12 +669,12 @@ function trackPurchase() {
     ) +
     window.location.hash;
 
+
   window.history.replaceState(
     {},
     document.title,
     cleanUrl
   );
-
 }
 
 
@@ -516,6 +693,7 @@ function preserveTrackingParams(
         window.location.search
       );
 
+
     const usefulKeys = [
       "utm_source",
       "utm_medium",
@@ -525,11 +703,13 @@ function preserveTrackingParams(
       "fbclid"
     ];
 
+
     const target =
       new URL(
         url,
         window.location.origin
       );
+
 
     usefulKeys.forEach((key) => {
 
@@ -552,6 +732,7 @@ function preserveTrackingParams(
 
     });
 
+
     if (
       target.origin ===
       window.location.origin
@@ -564,6 +745,7 @@ function preserveTrackingParams(
       );
 
     }
+
 
     return target.toString();
 
@@ -609,21 +791,26 @@ function loadDesktopBooking() {
       "[data-booking-frame]"
     );
 
+
   if (!bookingFrame) {
     return;
   }
 
+
   const baseSrc =
     bookingFrame.dataset.src;
+
 
   if (!baseSrc) {
     return;
   }
 
+
   const iframeUrl =
     preserveTrackingParams(
       baseSrc
     );
+
 
   if (
     bookingFrame.getAttribute(
@@ -662,11 +849,14 @@ function redirectToDirectBooking(
     return;
   }
 
+
   mobileRedirectScheduled = true;
+
 
   document.body.classList.add(
     "mobile-direct-booking"
   );
+
 
   window.setTimeout(
     () => {
@@ -687,13 +877,15 @@ function handleBookingExperience() {
   const page =
     document.body?.dataset?.page;
 
+
   if (page !== "booking") {
     return;
   }
 
+
   /*
     Desktop:
-    keep PadelByGu website + embedded GHL calendar.
+    keep website + embedded calendar.
   */
   if (!isMobileBookingDevice()) {
 
@@ -703,30 +895,34 @@ function handleBookingExperience() {
 
   }
 
+
   /*
     Mobile:
-    don't even load the iframe.
-    Go directly to GHL so Apple Pay /
-    Google Pay can work as top-level checkout.
+    skip embedded iframe and open
+    GHL as top-level page so Apple Pay /
+    Google Pay can be available.
   */
   document.body.classList.add(
     "mobile-direct-booking"
   );
 
+
   const consent =
     getConsent();
 
+
   /*
-    New visitor:
-    wait for cookie choice before redirect.
+    First-time visitor:
+    wait until cookie choice is made.
   */
   if (!consent) {
     return;
   }
 
+
   /*
-    If accepted, give Pixel a short moment
-    to send PageView / InitiateCheckout.
+    With marketing consent give Pixel
+    a short time to send events.
   */
   if (
     consent === "accepted"
@@ -773,10 +969,9 @@ function showCookieBannerIfNeeded() {
     return;
   }
 
+
   if (!getConsent()) {
-
     cookieBanner.hidden = false;
-
   }
 
 }
@@ -788,19 +983,20 @@ function acceptCookies() {
     "accepted"
   );
 
+
   if (cookieBanner) {
-
     cookieBanner.hidden = true;
-
   }
+
 
   loadMetaPixel();
 
   runPageTracking();
 
+
   /*
-    On mobile continue automatically
-    to top-level GHL after consent.
+    Continue automatically to the
+    direct mobile booking page.
   */
   if (
     document.body?.dataset?.page ===
@@ -823,15 +1019,15 @@ function rejectCookies() {
     "rejected"
   );
 
+
   if (cookieBanner) {
-
     cookieBanner.hidden = true;
-
   }
+
 
   /*
     Booking/payment still works.
-    We simply don't load Meta Pixel.
+    Meta Pixel simply remains off.
   */
   if (
     document.body?.dataset?.page ===
@@ -853,6 +1049,7 @@ cookieAccept?.addEventListener(
   acceptCookies
 );
 
+
 cookieReject?.addEventListener(
   "click",
   rejectCookies
@@ -868,18 +1065,16 @@ function runPageTracking() {
   const page =
     document.body?.dataset?.page;
 
+
   if (page === "booking") {
-
     trackBookingIntent();
-
   }
+
 
   if (
     page === "booking-success"
   ) {
-
     trackPurchase();
-
   }
 
 }
@@ -890,9 +1085,7 @@ function runPageTracking() {
 ========================================================= */
 
 if (hasMarketingConsent()) {
-
   loadMetaPixel();
-
 }
 
 showCookieBannerIfNeeded();
