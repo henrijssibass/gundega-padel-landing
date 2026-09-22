@@ -1,97 +1,110 @@
 <!doctype html>
 <html lang="lv">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Rezervē izmēģinājuma treniņu | PadelByGu</title>
-    <meta name="description" content="Izvēlies PadelByGu izmēģinājuma treniņa laiku un rezervē savu vietu par €15.">
-    <link rel="canonical" href="https://padelbygu.com/booking">
-    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body class="booking-page" data-page="booking">
-    <header class="site-header inner-page-header">
-      <a class="brand" href="/" aria-label="Atgriezties PadelByGu sākumlapā">
-        <span class="brand-mark">GP</span>
-        <span>PadelByGu</span>
-      </a>
-    </header>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <main>
-      <section class="booking-hero">
-        <div class="section-inner">
-          <p class="eyebrow">Izmēģinājuma treniņš · €15</p>
-          <h1>Izvēlies sev piemērotu laiku</h1>
-          <p>Rezervē vietu, aizpildi īsu informāciju un apmaksā €15. Apstiprinājumu saņemsi e-pastā uzreiz pēc veiksmīga maksājuma.</p>
-        </div>
-      </section>
+  <title>Rezervē izmēģinājuma treniņu | PadelByGu</title>
 
-      <section class="booking-section">
-        <div class="section-inner booking-layout">
-          <div class="booking-widget-card">
-            <iframe
-              id="padelbyguBookingFrame"
-              data-src="https://book.padelbygu.com/widget/bookings/padelbygu-trial"
-              src="https://book.padelbygu.com/widget/bookings/padelbygu-trial"
-              style="width:100%;border:none;overflow:hidden;"
-              scrolling="no"
-              loading="eager"
-              title="PadelByGu izmēģinājuma treniņa rezervācija"
-            ></iframe>
-          </div>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
 
-          <aside class="booking-trust-card">
-            <h2>Kas iekļauts?</h2>
-            <ul class="booking-trust-list">
-              <li>60 minūšu treniņš ar Gundegu</li>
-              <li>Padel korts</li>
-              <li>Sauna pēc treniņa</li>
-              <li>Grupa 3–5 dalībniekiem</li>
-              <li>Raketes noma pēc vajadzības: €5 uz vietas</li>
-              <li>Rezervāciju vari pārcelt vismaz 24h iepriekš</li>
-            </ul>
-            <p class="booking-small-print">
-              Veicot rezervāciju, Tu piekrīti
-              <a href="/noteikumi">rezervācijas noteikumiem</a> un
-              <a href="/privatuma-politika">Privātuma politikai</a>.
-            </p>
-          </aside>
-        </div>
-      </section>
-    </main>
+<body class="booking-page" data-page="booking">
 
-   <div class="cookie-banner" id="cookieBanner" hidden role="dialog" aria-live="polite" aria-label="Sīkdatņu izvēle">
-  <div class="cookie-banner__content">
-    <div>
-      <strong>Sīkdatnes</strong>
-      <p>
-        Mēs izmantojam sīkdatnes vietnes darbībai un, ar Jūsu piekrišanu,
-        reklāmu rezultātu mērīšanai.
-      </p>
-      <a href="/sikdatnu-politika">Uzzināt vairāk</a>
-    </div>
+  <main>
+    <section class="success-section">
+      <div class="section-inner">
 
-    <div class="cookie-banner__actions">
-      <button
-        class="cookie-button cookie-button--secondary"
-        id="cookieReject"
-        type="button"
-      >
-        Tikai nepieciešamās
-      </button>
+        <article class="success-card">
 
-      <button
-        class="cookie-button cookie-button--primary"
-        id="cookieAccept"
-        type="button"
-      >
-        Pieņemt
-      </button>
+          <p class="eyebrow">
+            Izmēģinājuma treniņš · €15
+          </p>
+
+          <h1>
+            Rezervē savu treniņu 🎾
+          </h1>
+
+          <p>
+            Izvēlies sev piemērotu laiku un apmaksā €15.
+            Pēc rezervācijas saņemsi apstiprinājumu e-pastā.
+          </p>
+
+          <a
+            class="button button-primary js-external-booking"
+            href="https://book.padelbygu.com/widget/bookings/padelbygu-trial"
+          >
+            Izvēlēties laiku
+          </a>
+
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+  <div
+    class="cookie-banner"
+    id="cookieBanner"
+    hidden
+    role="dialog"
+    aria-live="polite"
+    aria-label="Sīkdatņu izvēle"
+  >
+    <div class="cookie-banner__content">
+
+      <div>
+        <strong>Sīkdatnes</strong>
+
+        <p>
+          Mēs izmantojam sīkdatnes vietnes darbībai un,
+          ar Tavu piekrišanu, reklāmu rezultātu mērīšanai.
+        </p>
+
+        <a href="/sikdatnu-politika">
+          Uzzināt vairāk
+        </a>
+      </div>
+
+      <div class="cookie-banner__actions">
+
+        <button
+          class="cookie-button cookie-button--secondary"
+          id="cookieReject"
+          type="button"
+        >
+          Tikai nepieciešamās
+        </button>
+
+        <button
+          class="cookie-button cookie-button--primary"
+          id="cookieAccept"
+          type="button"
+        >
+          Pieņemt visas
+        </button>
+
+      </div>
+
     </div>
   </div>
-</div>
 
-    <script src="https://link.msgsndr.com/js/form_embed.js" type="text/javascript"></script>
-    <script src="script.js"></script>
-  </body>
+  <script src="script.js"></script>
+
+  <script>
+    document
+      .querySelector(".js-external-booking")
+      ?.addEventListener("click", function () {
+
+        if (
+          typeof trackBookingIntent === "function"
+        ) {
+          trackBookingIntent();
+        }
+
+      });
+  </script>
+
+</body>
 </html>
