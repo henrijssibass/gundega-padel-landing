@@ -35,6 +35,7 @@
       href="styles.css"
     >
 
+    <link rel="stylesheet" href="media.css">
     <link
       rel="canonical"
       href="https://padelbygu.com/"
@@ -246,6 +247,10 @@
     ></video>
 
 
+    <video class="hero-media-item hero-video" data-media-id="media-6" data-src="assets/media/coaching-pair.mp4" poster="assets/media/coaching-pair.jpg" muted loop playsinline preload="none" aria-label="Treniņš pārī"></video>
+    <video class="hero-media-item hero-video" data-media-id="media-7" data-src="assets/media/technique.mp4" poster="assets/media/technique.jpg" muted loop playsinline preload="none" aria-label="Sitiena tehnika"></video>
+    <video class="hero-media-item hero-video" data-media-id="media-8" data-src="assets/media/court-moments.mp4" poster="assets/media/court-moments.jpg" muted loop playsinline preload="none" aria-label="Tiekamies treniņos"></video>
+
     <!-- Previous -->
     <button
       class="hero-arrow hero-arrow--prev"
@@ -294,54 +299,40 @@
   </div>
 
 
-  <!-- Carousel dots -->
-  <div
-    class="hero-dots"
-    id="heroDots"
-    role="tablist"
-    aria-label="Galerijas navigācija"
-  >
-
-    <button
-      class="hero-dot is-active"
-      type="button"
-      data-index="0"
-      aria-label="Rādīt 1. materiālu"
-      aria-selected="true"
-    ></button>
-
-    <button
-      class="hero-dot"
-      type="button"
-      data-index="1"
-      aria-label="Rādīt 2. materiālu"
-      aria-selected="false"
-    ></button>
-
-    <button
-      class="hero-dot"
-      type="button"
-      data-index="2"
-      aria-label="Rādīt 3. materiālu"
-      aria-selected="false"
-    ></button>
-
-    <button
-      class="hero-dot"
-      type="button"
-      data-index="3"
-      aria-label="Rādīt 4. materiālu"
-      aria-selected="false"
-    ></button>
-
-    <button
-      class="hero-dot"
-      type="button"
-      data-index="4"
-      aria-label="Rādīt 5. materiālu"
-      aria-selected="false"
-    ></button>
-
+  <div class="gallery-heading"><span>Ieskaties treniņos</span><span id="galleryCount" aria-live="polite" aria-atomic="true">1 / 8</span></div>
+  <div class="hero-thumbs" id="heroDots" role="group" aria-label="Izvēlies foto vai video">
+    <button class="hero-thumb is-active" type="button" data-index="0" aria-label="Atskaņot video: Pirmais treniņš" aria-pressed="true">
+      <img src="assets/media/first-video-thumb.jpg" alt="" width="140" height="100">
+      <span class="thumb-play" aria-hidden="true">▶</span><span class="thumb-label">Pirmais treniņš</span>
+    </button>
+    <button class="hero-thumb" type="button" data-index="1" aria-label="Rādīt foto: Ar treneri" aria-pressed="false">
+      <img src="assets/media/coach-photo-thumb.jpg" alt="" width="140" height="100">
+      <span class="thumb-label">Ar treneri</span>
+    </button>
+    <button class="hero-thumb" type="button" data-index="2" aria-label="Rādīt foto: Soli pa solim" aria-pressed="false">
+      <img src="assets/media/training-photo-thumb.jpg" alt="" width="140" height="100">
+      <span class="thumb-label">Soli pa solim</span>
+    </button>
+    <button class="hero-thumb" type="button" data-index="3" aria-label="Rādīt foto: Kortā" aria-pressed="false">
+      <img src="assets/media/court-photo-thumb.jpg" alt="" width="140" height="100">
+      <span class="thumb-label">Kortā</span>
+    </button>
+    <button class="hero-thumb" type="button" data-index="4" aria-label="Atskaņot video: Bērniem" aria-pressed="false">
+      <img src="assets/media/junior-video-thumb.jpg" alt="" width="140" height="100">
+      <span class="thumb-play" aria-hidden="true">▶</span><span class="thumb-label">Bērniem</span>
+    </button>
+    <button class="hero-thumb" type="button" data-index="5" aria-label="Atskaņot video: Treniņš pārī" aria-pressed="false">
+      <img src="assets/media/coaching-pair-thumb.jpg" alt="" width="140" height="100">
+      <span class="thumb-play" aria-hidden="true">▶</span><span class="thumb-label">Treniņš pārī</span>
+    </button>
+    <button class="hero-thumb" type="button" data-index="6" aria-label="Atskaņot video: Sitiena tehnika" aria-pressed="false">
+      <img src="assets/media/technique-thumb.jpg" alt="" width="140" height="100">
+      <span class="thumb-play" aria-hidden="true">▶</span><span class="thumb-label">Sitiena tehnika</span>
+    </button>
+    <button class="hero-thumb" type="button" data-index="7" aria-label="Atskaņot video: Tiekamies treniņos" aria-pressed="false">
+      <img src="assets/media/court-moments-thumb.jpg" alt="" width="140" height="100">
+      <span class="thumb-play" aria-hidden="true">▶</span><span class="thumb-label">Tiekamies treniņos</span>
+    </button>
   </div>
 
 </div>
@@ -908,16 +899,19 @@
 
         <div class="section-inner coach-layout">
 
-          <div class="coach-photo reveal">
-
-            <img
-              src="assets/coach-cover.jpg"
-              alt="Trenere Gundega Pastore MyPadel kortā"
-              loading="lazy"
-            >
-
+          <div class="coach-media reveal">
+            <div class="coach-photo">
+              <img src="assets/coach-cover.jpg" alt="Trenere Gundega Pastore MyPadel kortā" loading="lazy">
+            </div>
+            <details class="coach-video-secondary" id="coachVideoPanel">
+              <summary id="coachPlay">
+                <img src="assets/media/gundega-coaching-thumb.jpg" alt="" width="64" height="64">
+                <span><strong>Gundega kortā</strong><small>Noskaties īsu video</small></span>
+                <span class="coach-video-icon" aria-hidden="true">▶</span>
+              </summary>
+              <video id="coachVideo" data-src="assets/media/gundega-coaching.mp4" poster="assets/media/gundega-coaching.jpg" controls muted loop playsinline preload="none" aria-label="Gundega demonstrē padela sitienu"></video>
+            </details>
           </div>
-
 
           <div class="coach-copy reveal">
 

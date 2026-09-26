@@ -120,7 +120,7 @@ const heroItems =
 const heroDots =
   Array.from(
     document.querySelectorAll(
-      ".hero-dot"
+      ".hero-thumb"
     )
   );
 
@@ -191,6 +191,8 @@ function showHeroMedia(index) {
       ) {
 
         if (isActive) {
+          if (item.dataset.src && !item.getAttribute("src")) item.src = item.dataset.src;
+          document.querySelector("#coachVideo")?.pause();
           item
             .play()
             .catch(() => {});
@@ -203,6 +205,9 @@ function showHeroMedia(index) {
     }
   );
 
+
+  const count = document.querySelector("#galleryCount");
+  if (count) count.textContent = `${currentHeroIndex + 1} / ${heroItems.length}`;
 
   heroDots.forEach(
     (dot, dotIndex) => {
@@ -217,7 +222,7 @@ function showHeroMedia(index) {
       );
 
       dot.setAttribute(
-        "aria-selected",
+        "aria-pressed",
         isActive
           ? "true"
           : "false"
@@ -1093,3 +1098,26 @@ showCookieBannerIfNeeded();
 runPageTracking();
 
 handleBookingExperience();
+
+/* Media gallery: thumbnail keyboard navigation and coach film. */
+document.querySelector('.hero-thumbs')?.addEventListener('keydown', event => {
+  const current = heroDots.indexOf(document.activeElement);
+  if (current < 0) return;
+  let next;
+  if (event.key === 'ArrowRight') next = (current + 1) % heroItems.length;
+  if (event.key === 'ArrowLeft') next = (current - 1 + heroItems.length) % heroItems.length;
+  if (event.key === 'Home') next = 0;
+  if (event.key === 'End') next = heroItems.length - 1;
+  if (next === undefined) return;
+  event.preventDefault(); showHeroMedia(next); heroDots[next].focus();
+});
+const coachVideo = document.querySelector('#coachVideo');
+const coachVideoPanel = document.querySelector('#coachVideoPanel');
+coachVideoPanel?.addEventListener('toggle', () => {
+  if (!coachVideoPanel.open) { coachVideo.pause(); return; }
+  if (!coachVideo.src) coachVideo.src = coachVideo.dataset.src;
+  coachVideo.play().catch(() => {});
+});
+coachVideo?.addEventListener('play', () => {
+  heroItems.forEach(item => { if (item.tagName === 'VIDEO') item.pause(); });
+});

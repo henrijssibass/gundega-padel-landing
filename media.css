@@ -1,0 +1,28 @@
+/* Media refresh: real thumbnails, with every item visible without scrolling. */
+.gallery-heading { display:flex; justify-content:space-between; align-items:center; margin:18px 0 10px; color:rgba(255,255,255,.65); font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
+.gallery-heading span:last-child { font-variant-numeric:tabular-nums; color:var(--green); }
+.hero-thumbs { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+.hero-thumb { position:relative; min-width:0; height:104px; padding:0; overflow:hidden; border:2px solid transparent; border-radius:6px; background:#172a30; cursor:pointer; color:white; transition:border-color .18s,transform .18s; }
+.hero-thumb img { display:block; width:100%; height:calc(100% - 26px); object-fit:cover; opacity:.92; transition:opacity .18s; }
+.hero-thumb.is-active { border-color:var(--green); }
+.hero-thumb.is-active img,.hero-thumb:hover img { opacity:1; }
+.hero-thumb:hover { transform:translateY(-2px); }
+.hero-thumb:focus-visible { outline:3px solid white; outline-offset:3px; }
+.thumb-play { position:absolute; top:7px; right:7px; z-index:1; display:grid; place-items:center; width:21px; height:21px; border-radius:50%; background:rgba(5,16,20,.75); font-size:9px; padding-left:1px; }
+.thumb-label { display:flex; align-items:center; justify-content:center; min-height:26px; padding:2px 3px; font-size:11px; line-height:1.1; font-weight:600; }
+.coach-media { min-width:0; }
+.coach-photo>img { display:block; }
+.coach-video-secondary { margin-top:14px; border:1px solid rgba(255,255,255,.16); border-radius:8px; overflow:hidden; background:rgba(255,255,255,.035); }
+.coach-video-secondary summary { display:flex; align-items:center; gap:14px; padding:12px; cursor:pointer; list-style:none; color:white; }
+.coach-video-secondary summary::-webkit-details-marker { display:none; }
+.coach-video-secondary summary>img { width:64px; height:64px; object-fit:cover; border-radius:4px; }
+.coach-video-secondary strong,.coach-video-secondary small { display:block; }
+.coach-video-secondary strong { font-size:15px; }
+.coach-video-secondary small { margin-top:4px; font-size:12px; color:rgba(255,255,255,.65); }
+.coach-video-icon { margin-left:auto; color:var(--green); font-size:18px; padding:0 8px; }
+.coach-video-secondary summary:hover { background:rgba(255,255,255,.05); }
+.coach-video-secondary summary:focus-visible { outline:2px solid var(--green); outline-offset:-3px; }
+.coach-video-secondary[open] .coach-video-icon { transform:rotate(90deg); }
+.coach-video-secondary>video { display:block; width:100%; max-height:480px; background:#071014; }
+@media(max-width:480px) { .hero-thumb { height:96px; } .thumb-label { font-size:10px; } .hero-thumbs { gap:6px; } }
+@media(prefers-reduced-motion:reduce) { .hero-thumb,.hero-thumb img { transition:none; } }
