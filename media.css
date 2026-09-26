@@ -11,6 +11,7 @@
 .thumb-play { position:absolute; top:7px; right:7px; z-index:1; display:grid; place-items:center; width:21px; height:21px; border-radius:50%; background:rgba(5,16,20,.75); font-size:9px; padding-left:1px; }
 .thumb-label { display:flex; align-items:center; justify-content:center; min-height:26px; padding:2px 3px; font-size:11px; line-height:1.1; font-weight:600; }
 .coach-media { min-width:0; }
+.coach-cta { margin-top:32px; }
 .coach-photo>img { display:block; }
 .coach-video-secondary { margin-top:14px; border:1px solid rgba(255,255,255,.16); border-radius:8px; overflow:hidden; background:rgba(255,255,255,.035); }
 .coach-video-secondary summary { display:flex; align-items:center; gap:14px; padding:12px; cursor:pointer; list-style:none; color:white; }
