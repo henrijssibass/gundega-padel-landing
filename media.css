@@ -27,3 +27,36 @@
 .coach-video-secondary>video { display:block; width:100%; max-height:480px; background:#071014; }
 @media(max-width:480px) { .hero-thumb { height:96px; } .thumb-label { font-size:10px; } .hero-thumbs { gap:6px; } }
 @media(prefers-reduced-motion:reduce) { .hero-thumb,.hero-thumb img { transition:none; } }
+
+/* Compact hero and unobtrusive, persistent mobile booking button. */
+.hero h1 { font-size:clamp(2.6rem,4.6vw,4rem); line-height:1.08; }
+.hero .trust-line { display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; }
+.hero .trust-line>span { white-space:nowrap; }
+.hero .bonus-line { margin-bottom:0; }
+.hero .microcopy { margin-top:6px; }
+.hero-contact-line a[href^="tel:"] { white-space:nowrap; }
+@media(min-width:720px) {
+  .hero { min-height:0; padding-bottom:48px; }
+  .hero-grid { grid-template-columns:minmax(0,1fr) minmax(0,.85fr); align-items:center; }
+  .hero-copy { align-self:center; padding-top:0; }
+  .hero-media { width:100%; max-width:380px; justify-self:end; }
+  .hero-frame { min-height:0; }
+  .hero-thumb { height:76px; }
+}
+@media(min-width:1040px) {
+  .hero-grid { grid-template-columns:minmax(0,1fr) 380px; gap:72px; max-width:1040px; }
+}
+@media(max-width:719px) {
+  html { scroll-padding-bottom:calc(76px + env(safe-area-inset-bottom,0px)); }
+  body { padding-bottom:calc(76px + env(safe-area-inset-bottom,0px)); }
+  .site-header { position:relative; padding:12px 18px; min-height:56px; background:var(--dark); }
+  .site-header .brand { gap:8px; font-size:14px; }
+  .site-header .brand-mark { width:28px; height:28px; font-size:11px; box-shadow:none; }
+  .hero { min-height:0; padding-top:28px; }
+  .hero-copy { min-height:0; }
+  .hero h1 { font-size:clamp(2.35rem,10vw,3rem); }
+  .hero .eyebrow { margin-bottom:12px; }
+  .hero .trust-line { font-size:14px; gap:5px 8px; margin-bottom:20px; }
+  .sticky-cta { left:50%; right:auto; transform:translateX(-50%); bottom:calc(12px + env(safe-area-inset-bottom,0px)); width:min(280px,calc(100% - 32px)); min-height:44px; padding:10px 16px; font-size:14px; line-height:24px; font-weight:800; box-shadow:0 4px 16px rgba(7,16,20,.2); }
+  .cookie-banner { bottom:calc(68px + env(safe-area-inset-bottom,0px)); }
+}
